@@ -1,0 +1,32 @@
+# Disable sudo to enable containerization
+sudo: false
+
+# Setup Go language support
+language: go
+
+# Test against multiple versions of Go
+go:
+  - 1.10.x
+  - 1.9.x
+  - 1.8.x
+  - master
+
+# Setup caching
+cache:
+  directories:
+    - $HOME/.clobber/opt
+
+# Install dependencies
+install:
+  - brew install dep
+  - dep resolve
+
+# Run tests and generate code coverage
+script:
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+  - go build -o xcodebuild-remote
+  - ./xcodebuild-remote --version
+
+# Upload code coverage
+after_success:
+- bash <(curl -s https://codecov.io/bash)
