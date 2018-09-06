@@ -19,7 +19,7 @@ cache:
 # Install dependencies
 install:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  - dep resolve
+  - dep ensure
 
 # Run tests and generate code coverage
 script:
