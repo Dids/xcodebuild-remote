@@ -20,24 +20,37 @@ func main() {
 	fmt.Println("args:", args)
 
 	// Validate that at least a single argument exists
-	if len(args) == 0 || (getArgument("--url") == "" && getArgument("-u") == "") {
+	if len(args) == 0 {
+		fmt.Println("Missing required argument (use --help for more information)")
+		os.Exit(1)
+	}
+
+	// Check if --help/-h is set
+	if getArgument("--help", true) != "" || getArgument("-h", true) != "" {
+		// TODO: Actually implement the help command
+		fmt.Println("WARNING: --help not implemented")
+		os.Exit(0)
+	}
+
+	// Check if --version/-v is set
+	if getArgument("--version", true) != "" || getArgument("-v", true) != "" {
+		fmt.Println("Version:", "v"+Version)
+		os.Exit(0)
+	}
+
+	// Validate that --url/-u exists
+	if getArgument("--url", false) == "" || getArgument("-u", false) == "" {
 		fmt.Println("Missing required argument: --url")
 		os.Exit(1)
 	}
 
-	// TODO: Somehow check if --help/-h exists and parse it
-
-	// TODO: Somehow check if --version/-v exists and parse it
-
-	// TODO: Check if --url/-u exists and parse it
-	url := getArgument("--url")
+	// Check if --url/-u exists and parse it
+	url := getArgument("--url", false)
 	if url != "" {
 		fmt.Println("Got url:", url)
 	}
 
-	// FIXME: Don't do this, but instead scan the args array for the argument and its value
-	urlArg := os.Args[0]
-	fmt.Println("urlArg:", urlArg)
+	// FIXME: How the heck do we get any leftover args? Use our custom struct and construct it with that?
 
 	// TODO: Check if "xcodebuild" exists and bail out if it doesn't
 
@@ -57,11 +70,16 @@ func main() {
 	// xcodebuild.Run()
 }
 
-func getArgument(argument string) string {
+func getArgument(argument string, skipValue bool) string {
 	for i, arg := range os.Args[1:] {
 		// Check if the argument name matches
 		if arg == argument {
 			fmt.Println("Found argument:", argument)
+
+			// Check if we don't need a value
+			if skipValue {
+				return argument
+			}
 
 			// Check if the argument has a value
 			if len(os.Args[1:]) > i+1 {
