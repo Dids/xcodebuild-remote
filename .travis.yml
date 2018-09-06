@@ -18,7 +18,7 @@ cache:
 
 # Install dependencies
 install:
-  - brew install dep
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - dep resolve
 
 # Run tests and generate code coverage
