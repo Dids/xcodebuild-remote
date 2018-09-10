@@ -5,23 +5,27 @@ sudo: false
 language: go
 
 # Test against multiple versions of Go
-go:
-  - 1.10.x
-  - 1.9.x
-  - 1.8.x
-  - master
+#go:
+#  - 1.10.x
+#  - 1.9.x
+#  - 1.8.x
+#  - master
 
 # Without this top-level env, no job will be allowed to fail
-env: 
+env:
+  - TEST_COMMAND=go test -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 # Setup Go version specific configurations
 matrix:
   include:
+  - go: master
+  - go: 1.10.x
   - go: 1.9.x
+    env:
+      - TEST_COMMAND=echo "Tests disabled for this version of Go"
   - go: 1.8.x
-  allow_failures:
-  - go: 1.9.x
-  - go: 1.8.x
+    env:
+      - TEST_COMMAND=echo "Tests disabled for this version of Go"
 
 # Setup caching
 cache:
@@ -35,7 +39,8 @@ install:
 
 # Run tests and generate code coverage
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+  #- go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+  - $TEST_COMMAND
   - go build -o xcodebuild-remote
   - ./xcodebuild-remote --version
 
