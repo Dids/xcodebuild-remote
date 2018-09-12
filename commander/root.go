@@ -44,18 +44,30 @@ func ParseArgs() {
 	args := os.Args[1:]
 	//fmt.Println("args:", args)
 
+	// FIXME: This is also including command values, which is NOT what we want..
 	// Loop through all the command line arguments
+	lastCommandNeedsValue := false
 	for _, arg := range args {
-		// Loop through all of our commands to find which args are considered extra
 		isCommand := false
+		isValue := lastCommandNeedsValue
+
+		// Loop through all of our commands to find which args are considered extra
 		for _, command := range Commands {
 			if arg == command.Argument || arg == command.ShortArgument {
 				isCommand = true
+				lastCommandNeedsValue = command.NeedsValue
 			}
 		}
+
 		// Store unused arguments in an array
-		if !isCommand {
+		if !isCommand && !isValue {
 			ExtraArgs = append(ExtraArgs, arg)
+		}
+
+		// Reset command value
+		if isValue {
+			lastCommandNeedsValue = false
+			isValue = false
 		}
 	}
 

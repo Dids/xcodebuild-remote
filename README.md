@@ -21,7 +21,7 @@
 
 **NOTICE:** _SVN support is planned but not there yet._ 
 
-> xcodebuild-remote --url <repository url> <optional xcodebuild arguments>  
+> xcodebuild-remote --url <repository url> [optional xcodebuild arguments]  
 
 Various formats are supported for the repository url:  
 - HTTP(S) (`https://repo.url`)  
