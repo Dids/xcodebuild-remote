@@ -1,0 +1,9 @@
+# github.com/blang/semver v3.5.1+incompatible
+## explicit
+github.com/blang/semver
+# github.com/gogs/git-module v1.1.1
+## explicit
+github.com/gogs/git-module
+# github.com/mcuadros/go-version v0.0.0-20190830083331-035f6764e8d2
+## explicit
+github.com/mcuadros/go-version

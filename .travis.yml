@@ -1,41 +1,54 @@
-# Disable sudo to enable containerization
-sudo: false
-
-# Setup Go language support
 language: go
 
-# Setup global environment variables
-env:
-  - TEST_COMMAND="go test -race -coverprofile=coverage.txt -covermode=atomic ./..."
+os: osx
 
-# Setup Go version specific configurations
 matrix:
+  fast_finish: true
+  allow_failures:
+    - go: master
   include:
   - go: master
-  - go: 1.10.x
-  - go: 1.9.x
-    env:
-      - TEST_COMMAND="echo \"Tests disabled for this version of Go\""
-  - go: 1.8.x
-    env:
-      - TEST_COMMAND="echo \"Tests disabled for this version of Go\""
+    script:
+      - make deps
+      - make build
+      - make test
+      - make install
+      - make uninstall
+  - go: 1.14.x
+    script:
+      - make deps
+      - make build
+      - make test
+      - make install
+      - make uninstall
+  - go: 1.13.x
+    script:
+      - make deps
+      - make build
+      - make test
+      - make install
+      - make uninstall
+  - go: 1.12.x
+    script:
+      - make deps EXTRA_FLAGS=
+      - make build EXTRA_FLAGS=
+      - make test EXTRA_FLAGS=
+      - make install EXTRA_FLAGS=
+      - make uninstall EXTRA_FLAGS=
 
-# Setup caching
+env:
+  global:
+    - GO111MODULE=on
+    - GOPROXY=
+
+install: true
+
+after_success: bash <(curl -s https://codecov.io/bash)
+
 cache:
   directories:
-    - $HOME/.clobber/opt
-
-# Install dependencies
-install:
-  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  - dep ensure
-
-# Run tests and generate code coverage
-script:
-  - eval $TEST_COMMAND
-  - go build -o xcodebuild-remote
-  - ./xcodebuild-remote --version
-
-# Upload code coverage
-after_success:
-- bash <(curl -s https://codecov.io/bash)
+    - !$GOPATH/src/Dids/xcodebuild-remote
+    - $GOPATH/src
+    - !$GOPATH/bin/Dids/xcodebuild-remote
+    - $GOPATH/bin
+    - $GOPATH/pkg

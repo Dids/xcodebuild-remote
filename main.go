@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Dids/xcodebuild-remote/commander"
-	git "github.com/gogits/git-module"
+	git "github.com/gogs/git-module"
 )
 
 // Version is set dynamically when building
@@ -83,7 +83,7 @@ func gitClone(cwd string, url string) {
 
 	// TODO: Implement the 4 different git repo url formats (https://, git://, git+ssh://, user/repo for GitHub)
 	// TODO: Clone or checkout depending on if it already exists (clean it in-between builds though?)
-	git.Clone(url, cwd, git.CloneRepoOptions{Branch: branch, Bare: false, Quiet: false})
+	git.Clone(url, cwd, git.CloneOptions{Branch: branch, Bare: false, Quiet: false})
 }
 
 func xcodebuild(cwd string, args []string) {

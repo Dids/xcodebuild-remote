@@ -1,6 +1,9 @@
 ### Code Coverage ###
 coverage.txt
 
+# Backups
+/github.com/
+
 ### Go ###
 # Binaries for programs and plugins
 *.exe
@@ -9,14 +12,26 @@ coverage.txt
 *.dylib
 
 ### Go Vendor Packages ###
-vendor/*/
+#vendor/
+
+# Other
+/go/
+/build/
+/test.sh
 
 # Binaries for Go
-debug
-release
-debug/
-release/
-clobber
+/debug
+/release
+/debug/
+/release/
+/xcodebuild-remote
+
+# Packr
+/packrd/
+*-packr.go
+
+# Environment files
+.env*
 
 # Test binary, build with `go test -c`
 *.test
